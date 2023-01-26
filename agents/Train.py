@@ -4,7 +4,7 @@
 import numpy as np
 import ipdb
 import copy as cp
-import logger
+import logging
 from util import *
 import time
 from collections import Counter
@@ -39,7 +39,7 @@ class Train(object):
 
     def train(self):
         for epoch in range(self.args.training_epoch):
-            logger.log(epoch)
+            #logger.log(epoch)
             self.collecting_data_update_model("training", epoch)
             if epoch % 100 == 0 and epoch >= 300:
                 self.collecting_data_update_model("validation", epoch)
@@ -94,15 +94,15 @@ class Train(object):
                 batch = [self.memory[item] for item in np.random.choice(range(len(self.memory)),(self.args.batch,))]
                 data = self.convert_batch2dict(batch,epoch)
                 loss = self.fa.optimize_model(data, self.args.learning_rate)
-                logger.record_tabular("loss ", "|".join([str(np.round(loss, 4))]))
+                #logger.record_tabular("loss ", "|".join([str(np.round(loss, 4))]))
                 self.tau += 5
-        for item in self.args.ST:
-            logger.record_tabular(str(item)+"ACC",round(np.mean([i["ACC"] for i in infos[item]]),4))
-            logger.record_tabular(str(item)+"AUC",round(np.mean([i["AUC"] for i in infos[item]]),4))
-            logger.log(str(item)+" ACC: ",round(np.mean([i["ACC"] for i in infos[item]]),4))
-        logger.record_tabular("epoch", epoch)
-        logger.record_tabular("type", type)
-        logger.dump_tabular()
+        # for item in self.args.ST:
+        #     logger.record_tabular(str(item)+"ACC",round(np.mean([i["ACC"] for i in infos[item]]),4))
+        #     logger.record_tabular(str(item)+"AUC",round(np.mean([i["AUC"] for i in infos[item]]),4))
+        #     logger.log(str(item)+" ACC: ",round(np.mean([i["ACC"] for i in infos[item]]),4))
+        # logger.record_tabular("epoch", epoch)
+        # logger.record_tabular("type", type)
+        # logger.dump_tabular()
 
     def convert_batch2dict(self, batch, epoch):
         uids = []

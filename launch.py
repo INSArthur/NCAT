@@ -3,7 +3,7 @@
 
 import numpy as np
 import ipdb
-import logger
+import logging
 from datetime import datetime
 import sys
 from util import get_objects,set_global_seeds,arg_parser
@@ -56,8 +56,9 @@ def main(args):
     set_global_seeds(args.seed)
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_no)
     # logger
-    logger.configure("./log"+args.data_path.split("/")[-2]+"/"+"_".join([args.model,datetime.now().strftime("%Y%m%d_%H%M%S"),args.data_path.split("/")[-2],str(args.learning_rate),str(args.T),str(args.ST),str(args.gamma)]))
-    logger.log("Training Model: "+args.model)
+    logger = logging.getLogger()
+    logger.info("./log"+args.data_path.split("/")[-2]+"/"+"_".join([args.model,datetime.now().strftime("%Y%m%d_%H%M%S"),args.data_path.split("/")[-2],str(args.learning_rate),str(args.T),str(args.ST),str(args.gamma)]))
+    logger.info("Training Model: "+args.model)
     # environments
     envs = get_objects(all_envs)
     env = envs[args.environment](args)
@@ -69,7 +70,9 @@ def main(args):
     nets = get_objects(all_FA)
     fa = nets[args.FA].create_model(args)
     # return
-    logger.log("Hype-Parameters: "+str(args))
+        #TODO : fix this !
+        #logger.log("Hype-Parameters: "+str(args))
+    print(str(args))
     # # agents
     agents = get_objects(all_agents)
     agents[args.agent](env, fa, args).train()

@@ -22,7 +22,7 @@ class NCAT(nn.Module):
     def __init__(self, n_question, d_model, n_blocks,
                  kq_same, dropout, policy_fc_dim=512, n_heads=1, d_ff=2048,  l2=1e-5, separate_qa=None, pad=0):
         super().__init__()
-        self.device = torch.device('cuda')
+        self.device = torch.device('cpu')
         self.pad = pad
         self.n_question = n_question
         self.dropout = dropout
@@ -109,7 +109,7 @@ class NCAT(nn.Module):
     def create_model(cls, config):
         model = cls(config.item_num, config.latent_factor, config.num_blocks,
                  True, config.dropout_rate, policy_fc_dim=512, n_heads=config.num_heads, d_ff=2048,  l2=1e-5, separate_qa=None, pad=0)
-        return model.to(torch.device('cuda'))
+        return model.to(torch.device('cpu'))
 
 
 def mask(src, s_len):
